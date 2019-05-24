@@ -78,8 +78,8 @@ install: $(BIND)/$(NAME)
 	@install -DZ $(RESD)/wsetup.sh -t $(DATADIR)
 	@install -dZ $(DATADIR)/lang
 	@install -DZ $(RESD)/lang/* -t $(DATADIR)/lang
-	@install -DZ $(RESD)/ly.service -m 644 -t ${DESTDIR}/usr/lib/systemd/system
-	@install -DZ $(RESD)/pam.d/ly -m 644 -t ${DESTDIR}/etc/pam.d
+	@install -dZ ${DESTDIR}/etc/sv/ly-runit-service
+	@install -DZ $(RESD)/ly-runit-service/* -t ${DESTDIR}/etc/sv/ly-runit-service
 
 installnoconf: $(BIND)/$(NAME)
 	@echo "installing without the configuration file"
@@ -89,8 +89,8 @@ installnoconf: $(BIND)/$(NAME)
 	@install -DZ $(RESD)/wsetup.sh -t $(DATADIR)
 	@install -dZ $(DATADIR)/lang
 	@install -DZ $(RESD)/lang/* -t $(DATADIR)/lang
-	@install -DZ $(RESD)/ly.service -m 644 -t ${DESTDIR}/usr/lib/systemd/system
-	@install -DZ $(RESD)/pam.d/ly -m 644 -t ${DESTDIR}/etc/pam.d
+	@install -dZ ${DESTDIR}/etc/sv/ly-runit-service
+	@install -DZ $(RESD)/ly-runit-service/* -t ${DESTDIR}/etc/sv/ly-runit-service
 
 uninstall:
 	@echo "uninstalling"
@@ -98,7 +98,7 @@ uninstall:
 	@rm -rf $(DATADIR)
 	@rm -f ${DESTDIR}/usr/bin/ly
 	@rm -f ${DESTDIR}/usr/lib/systemd/system/ly.service
-	@rm -f ${DESTDIR}/etc/pam.d/ly
+	@rm -rf ${DESTDIR}/etc/sv/ly-runit-service
 
 clean:
 	@echo "cleaning"
@@ -108,9 +108,7 @@ clean:
 remotes:
 	@echo "registering remotes"
 	@git remote add github git@github.com:nullgemm/$(NAME).git
-	@git remote add gitea ssh://git@git.nullgem.fr:2999/nullgemm/$(NAME).git
 
-gitea: github
 github:
 	@echo "sourcing submodules"
 	@git submodule sync

@@ -3,11 +3,18 @@
 
 Ly is a lightweight TUI (ncurses-like) display manager for Linux and BSD.
 
+## Patches added in fork
+Takes from ddrozdowsky/ly-void
+- runit service instead of systemd one by @qub1750ul
+- it language patch by @termgod
+
+Re-applied onto current master of nullgemm/ly.
+
 ## Dependencies
  - a C99 compiler (tested with tcc and gcc)
  - a C standard library
  - GNU make
- - pam
+ - pam **removed**
  - xcb
  - xorg
  - xorg-xauth
@@ -35,14 +42,13 @@ The following desktop environments were tested with success
  - maxx
  - windowmaker
 
+**This fork only tested using Sway on Void Linux**
+
 Ly should work with any X desktop environment, and provides
 basic wayland support (sway works very well, for example).
 
 ## systemd?
-Unlike what you may have heard, Ly does not require `systemd`,
-and was even specifically designed not to depend on `logind`.
-You should be able to make it work easily with a better init,
-changing the source code won't be necessary :)
+**This fork has been patched to remove systemd support, use nullgemm/ly.**
 
 ## Cloning and Compiling
 Clone the repository
@@ -67,19 +73,19 @@ sudo make run
 ```
 
 Install Ly and the provided systemd service file
+Then, install Ly and the runit service file
 ```
 sudo make install
 ```
 
-Enable the service
+Now enable the runit service to make it spawn on startup
 ```
-sudo systemctl enable ly.service
+sudo ln -s /etc/sv/ly-runit-service /var/service/
 ```
 
-If you need to switch between ttys after Ly's start you also have to
-disable getty on Ly's tty to prevent "login" from spawning on top of it
+You can disable getty-tty2
 ```
-sudo systemctl disable getty@tty2.service
+sudo rm /var/service/agetty-tty2
 ```
 
 ## Configuration
